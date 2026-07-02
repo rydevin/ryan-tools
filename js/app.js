@@ -1,4 +1,4 @@
-const KEY='waypoint_v22_data';
+const KEY='waypoint_v221_data';
 const defaultTrip={
   trip:{name:'England Adventure 2026',start:'2026-07-06',end:'2026-08-07',privacy:'Local device only'},
   days:[
@@ -40,12 +40,32 @@ const defaultTrip={
 };
 let state={view:'home', selectedDate:null, modal:null, editing:null, search:''};
 let data=load();
-function load(){try{return {...structuredClone(defaultTrip),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return structuredClone(defaultTrip)}}
+
+function cloneDefault(){
+  try{return structuredClone(defaultTrip)}
+  catch(e){return JSON.parse(JSON.stringify(defaultTrip))}
+}
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(!raw) return cloneDefault();
+    const stored=JSON.parse(raw);
+    const base=cloneDefault();
+    const merged={...base,...stored};
+    merged.trip={...base.trip,...(stored.trip||{})};
+    merged.days=Array.isArray(stored.days)&&stored.days.length?stored.days:base.days;
+    merged.reservations=Array.isArray(stored.reservations)?stored.reservations:[];
+    merged.journals=Array.isArray(stored.journals)?stored.journals:[];
+    merged.places=Array.isArray(stored.places)?stored.places:[];
+    merged.favorites=Array.isArray(stored.favorites)?stored.favorites:[];
+    return merged;
+  }catch(e){return cloneDefault()}
+}
 function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
 function fmtDate(d){return new Date(d+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}
 function longDate(d){return new Date(d+'T12:00:00').toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
-function todayDate(){const now=new Date(); const s=data.trip.start,e=data.trip.end; const iso=now.toISOString().slice(0,10); return iso<s?s:iso>e?e:iso}
+function todayDate(){const now=new Date(); const s=data.trip.start,e=data.trip.end; const iso=now.toISOString().slice(0,10); const target=iso<s?s:iso>e?e:iso; return dayFor(target)?target:(data.days[0]?.date||s)}
 function dayFor(date){return data.days.find(x=>x.date===date)}
 function reservationsFor(date){return data.reservations.filter(r=>r.date===date).sort((a,b)=>(a.time||'').localeCompare(b.time||''))}
 function journalsFor(date){return data.journals.filter(j=>j.date===date)}
@@ -53,7 +73,24 @@ function setView(v,opts={}){state={...state,view:v,...opts,modal:null,editing:nu
 function appShell(inner){return `<div class="app">${inner}${nav()}</div>`}
 function nav(){const items=[['home','🏠','Home'],['days','📅','Days'],['reservations','🎟️','Reserve'],['journal','📷','Journal'],['settings','⚙️','Settings']];return `<div class="bottom">${items.map(i=>`<button class="navbtn ${state.view===i[0]?'active':''}" onclick="setView('${i[0]}')"><span class="ico">${i[1]}</span>${i[2]}</button>`).join('')}</div>`}
 function hero(title,sub){return `<div class="hero"><div class="eyebrow">Waypoint</div><h1>${title}</h1><p>${sub}</p></div>`}
-function render(){let html=''; if(state.view==='home')html=home(); if(state.view==='days')html=days(); if(state.view==='day')html=dayView(state.selectedDate); if(state.view==='reservations')html=reservations(); if(state.view==='journal')html=journal(); if(state.view==='settings')html=settings(); document.getElementById('app').innerHTML=appShell(html)+modal(); if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});}
+
+function render(){
+  try{
+    let html='';
+    if(state.view==='home')html=home();
+    if(state.view==='days')html=days();
+    if(state.view==='day')html=dayView(state.selectedDate||todayDate());
+    if(state.view==='reservations')html=reservations();
+    if(state.view==='journal')html=journal();
+    if(state.view==='settings')html=settings();
+    document.getElementById('app').innerHTML=appShell(html)+modal();
+    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+  }catch(err){
+    console.error(err);
+    const app=document.getElementById('app');
+    if(app) app.innerHTML=`<div class="app"><div class="hero"><div class="eyebrow">Waypoint</div><h1>We hit a loading issue</h1><p>Your saved trip data is still private on this device. Try clearing only Waypoint local data below, or upload the prior stable backup.</p></div><main class="content"><div class="card"><h2>Quick Fix</h2><p class="muted">This resets Waypoint data for this browser only. It does not affect GitHub or another phone.</p><button class="btn danger" onclick="localStorage.removeItem('${KEY}'); location.reload();">Reset Waypoint local data</button></div><div class="card"><h2>Error detail</h2><p class="muted small">${String(err.message||err)}</p></div></main></div>`;
+  }
+}
 function home(){const td=todayDate(),d=dayFor(td);const count=data.days.length;const res=reservationsFor(td);return `${hero('Waypoint',data.trip.name)}<main class="content"><div class="card"><div class="row"><div><span class="pill">🇬🇧 England Adventure</span><h2 class="section-title">Today: ${d.place}</h2><div class="muted">${longDate(td)} · Day ${data.days.indexOf(d)+1} of ${count}</div></div><button class="btn" onclick="setView('day',{selectedDate:'${td}'})">Open</button></div></div><div class="grid"><button class="tile" onclick="setView('days')">📅<b>Daily Timeline</b><span>Activities, reservations, and journal by date.</span></button><button class="tile" onclick="openAdd('reservation','${td}')">🍽️<b>Add Reservation</b><span>Date picker and time picker included.</span></button><button class="tile" onclick="openAdd('journal','${td}')">📷<b>Add Journal</b><span>Notes, favorite memory, and photos.</span></button><button class="tile" onclick="setView('settings')">💾<b>Backup / Share</b><span>Export for Julie or restore a backup.</span></button></div><h2 class="section-title">Today's Reservations</h2><div class="list">${res.length?res.map(resCard).join(''):'<div class="empty">No reservations for today yet.</div>'}</div></main>`}
 function days(){return `${top('Daily Timeline')}<main class="content"><div class="search"><input placeholder="Search days, places, activities..." value="${state.search}" oninput="state.search=this.value;render()"></div><br><div class="list">${data.days.filter(d=>JSON.stringify(d).toLowerCase().includes(state.search.toLowerCase())).map(d=>`<button class="item" onclick="setView('day',{selectedDate:'${d.date}'})"><div class="row"><div><div class="item-title">${fmtDate(d.date)} · ${d.place}</div><div class="muted">${d.title}</div></div><span>›</span></div></button>`).join('')}</div></main>`}
 function dayView(date){const d=dayFor(date);const res=reservationsFor(date);const journals=journalsFor(date);let events=[...(d.activities||[]).map(a=>({...a,kind:'activity'})),...res.map(r=>({time:r.time,title:r.name,type:r.type||'reservation',kind:'reservation',id:r.id,meta:r.confirmation?`Confirmation: ${r.confirmation}`:''}))].sort((a,b)=>(a.time||'').localeCompare(b.time||''));return `${top('Day Details')}<main class="content"><div class="card day-head"><div><span class="pill">${d.place}</span><h2 class="section-title">${d.title}</h2><div class="muted">${longDate(date)}</div></div><div class="date-badge"><div class="mo">${new Date(date+'T12:00').toLocaleDateString(undefined,{month:'short'})}</div><div class="da">${new Date(date+'T12:00').getDate()}</div></div></div><h2 class="section-title">Timeline</h2><div class="timeline">${events.length?events.map(e=>`<div class="event"><div class="event-time">${e.time||'Anytime'} · ${icon(e.type)} ${label(e.type)}</div><div class="item-title">${e.title}</div>${e.location?`<div class="muted">${e.location}</div>`:''}${e.meta?`<div class="muted">${e.meta}</div>`:''}</div>`).join(''):'<div class="empty">No timeline items yet.</div>'}</div><h2 class="section-title">Journal</h2><div class="list">${journals.length?journals.map(journalCard).join(''):'<div class="empty">No journal entries yet.</div>'}</div></main><button class="fab" onclick="openQuick('${date}')">+</button>`}
@@ -82,5 +119,5 @@ function esc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','
 function fileToData(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(file)})}
 function exportData(){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Waypoint_England_Backup.json';a.click();URL.revokeObjectURL(a.href)}
 function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{data=JSON.parse(r.result);save();alert('Backup imported.')}catch(err){alert('Could not import this file.')}};r.readAsText(f)}
-function resetData(){if(confirm('Reset Waypoint data on this device?')){localStorage.removeItem(KEY);data=structuredClone(defaultTrip);render()}}
+function resetData(){if(confirm('Reset Waypoint data on this device?')){localStorage.removeItem(KEY);data=cloneDefault();render()}}
 render();
