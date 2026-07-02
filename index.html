@@ -1,138 +1,48 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#102033">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0f172a" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="css/app.css" />
 <title>Waypoint</title>
-<style>
-:root{--bg:#f4f1eb;--card:#fffaf2;--ink:#1d2733;--muted:#667085;--line:rgba(29,39,51,.12);--brand:#12324a;--brand2:#2f7d7e;--gold:#d9a441;--red:#b6533c;--shadow:0 14px 35px rgba(17,35,55,.12);--radius:22px;--safeB:env(safe-area-inset-bottom,0px)}
-[data-theme="dark"]{--bg:#0d141c;--card:#17212b;--ink:#f4efe6;--muted:#aab4bf;--line:rgba(255,255,255,.12);--brand:#9bc8d1;--brand2:#6fc3b6;--gold:#f0c86b;--red:#ef8a72;--shadow:0 14px 35px rgba(0,0,0,.28)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}button,input,textarea,select{font:inherit;color:inherit}.app{max-width:860px;margin:0 auto;min-height:100vh;padding:18px 16px calc(92px + var(--safeB))}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 18px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;color:white;box-shadow:var(--shadow)}.logo svg{width:28px}.title h1{font-size:24px;margin:0;letter-spacing:-.04em}.title p{margin:3px 0 0;color:var(--muted);font-size:13px;font-weight:700}.pill{border:1px solid var(--line);background:rgba(255,255,255,.4);border-radius:999px;padding:9px 12px;font-weight:800;font-size:13px}.hero{background:linear-gradient(135deg,#102033,#245d64 60%,#d9a441);color:white;border-radius:30px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-60px;top:-70px;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.12)}.hero h2{font-size:32px;line-height:1.02;margin:0 0 10px;letter-spacing:-.05em}.hero p{margin:0;color:rgba(255,255,255,.84);font-weight:700;line-height:1.45}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:16px;padding:13px 15px;font-weight:900;background:var(--brand);color:white;cursor:pointer;box-shadow:0 8px 20px rgba(18,50,74,.18)}.btn.secondary{background:rgba(255,255,255,.16);color:white;border:1px solid rgba(255,255,255,.24);box-shadow:none}.btn.light{background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:none}.section{margin-top:22px}.section h3{font-size:16px;margin:0 0 12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:17px;box-shadow:0 6px 18px rgba(17,35,55,.06);cursor:pointer}.card:active{transform:scale(.99)}.card.big{grid-column:1/-1}.card h4{margin:0 0 6px;font-size:18px;letter-spacing:-.02em}.card p{margin:0;color:var(--muted);font-size:14px;line-height:1.4;font-weight:650}.emoji{font-size:28px;margin-bottom:9px}.row{display:flex;gap:12px;align-items:center;justify-content:space-between}.stat{font-weight:900;font-size:30px;letter-spacing:-.05em}.progress{height:9px;border-radius:99px;background:rgba(255,255,255,.22);overflow:hidden;margin-top:14px}.progress span{display:block;height:100%;background:var(--gold);border-radius:99px}.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:8px 12px calc(8px + var(--safeB));display:flex;justify-content:center}.tabbar{max-width:860px;width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.tab{border:0;background:transparent;border-radius:16px;padding:8px 4px;color:var(--muted);font-size:12px;font-weight:900;cursor:pointer}.tab.active{background:rgba(47,125,126,.14);color:var(--brand2)}.tab span{display:block;font-size:22px;margin-bottom:2px}.view{display:none}.view.active{display:block}.back{border:0;background:transparent;color:var(--brand2);font-weight:900;margin:4px 0 14px;padding:10px 0}.day-list{display:flex;flex-direction:column;gap:10px}.day{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px}.day-head{display:flex;justify-content:space-between;gap:12px}.date{font-size:13px;color:var(--muted);font-weight:900}.place{font-size:19px;font-weight:950;margin-top:2px}.mini{font-size:13px;color:var(--muted);font-weight:700}.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.chip{border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:var(--muted);font-size:12px;font-weight:800}.activity{display:flex;gap:10px;margin:10px 0;padding:11px;border:1px solid var(--line);border-radius:15px;background:rgba(127,127,127,.04)}.time{min-width:62px;font-weight:950;color:var(--brand2)}.act-title{font-weight:850}.act-notes{font-size:13px;color:var(--muted);margin-top:2px}.form{display:flex;flex-direction:column;gap:10px}.input,textarea,select{width:100%;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:13px;color:var(--ink)}textarea{min-height:98px;resize:vertical}.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.42);display:none;align-items:flex-end}.modal.show{display:flex}.sheet{background:var(--bg);width:100%;max-width:860px;margin:0 auto;border-radius:28px 28px 0 0;padding:18px 16px calc(18px + var(--safeB));max-height:88vh;overflow:auto}.sheet h3{margin:0 0 12px;font-size:23px}.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.small{font-size:13px;padding:10px 12px;border-radius:12px}.danger{background:var(--red)!important}.notice{background:rgba(217,164,65,.13);border:1px solid rgba(217,164,65,.28);border-radius:18px;padding:14px;color:var(--ink);font-size:14px;line-height:1.4}.search{position:sticky;top:0;background:var(--bg);padding:8px 0 14px;z-index:5}.empty{color:var(--muted);text-align:center;padding:30px 10px}.hidden{display:none!important}@media(min-width:720px){.grid{grid-template-columns:repeat(3,1fr)}.card.big{grid-column:span 2}.hero h2{font-size:42px}}
-</style>
 </head>
 <body>
-<div class="app">
-  <div class="top">
-    <div class="brand"><div class="logo"><svg viewBox="0 0 100 100"><path fill="currentColor" d="M50 6l14 31 30 13-30 13-14 31-14-31L6 50l30-13z"/></svg></div><div class="title"><h1>Waypoint</h1><p id="subline">Your local-first command center</p></div></div>
-    <button class="pill" id="themeBtn">Theme</button>
-  </div>
-
-  <section id="home" class="view active">
-    <div class="hero">
-      <h2>England Adventure</h2>
-      <p id="heroText">Your family trip dashboard, daily planner, journal, reservations, and saved places — stored locally on this device.</p>
-      <div class="progress"><span id="tripProgress" style="width:0%"></span></div>
-      <div class="hero-actions"><button class="btn" onclick="show('today')">Open Today</button><button class="btn secondary" onclick="show('builder')">Edit Trip</button></div>
+<div id="app" class="app-shell">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Waypoint 2.0</div>
+      <h1 id="pageTitle">Waypoint</h1>
+      <p id="pageSubtitle">Your local-first travel and life command center.</p>
     </div>
-    <div class="section"><h3>Quick Launch</h3><div class="grid">
-      <div class="card big" onclick="show('today')"><div class="emoji">🇬🇧</div><h4>Today Dashboard</h4><p>See the best plan for the current trip day, plus journal and reservation shortcuts.</p></div>
-      <div class="card" onclick="show('itinerary')"><div class="emoji">📅</div><h4>Itinerary</h4><p>Edit days and activities.</p></div>
-      <div class="card" onclick="show('journal')"><div class="emoji">📷</div><h4>Journal</h4><p>Daily notes, favorite moments, and photos.</p></div>
-      <div class="card" onclick="show('reservations')"><div class="emoji">🎟️</div><h4>Reservations</h4><p>Tickets, meals, hotels, trains.</p></div>
-      <div class="card" onclick="show('places')"><div class="emoji">📍</div><h4>Saved Places</h4><p>Restaurants, hikes, fishing, pubs.</p></div>
-      <div class="card" onclick="show('hunts')"><div class="emoji">👑</div><h4>Family Hunts</h4><p>Open each scavenger hunt.</p></div>
-    </div></div>
-  </section>
+    <button class="icon-button" id="themeBtn" aria-label="Toggle theme">☀️</button>
+  </header>
 
-  <section id="today" class="view"><button class="back" onclick="show('home')">← Home</button><div id="todayWrap"></div></section>
-  <section id="itinerary" class="view"><button class="back" onclick="show('home')">← Home</button><div class="row"><h2>Itinerary</h2><button class="btn small" onclick="editDay()">+ Add Day</button></div><div id="days" class="day-list"></div></section>
-  <section id="journal" class="view"><button class="back" onclick="show('home')">← Home</button><div class="row"><h2>Travel Journal</h2><button class="btn small" onclick="openJournal()">+ Entry</button></div><div id="journalList" class="day-list"></div></section>
-  <section id="reservations" class="view"><button class="back" onclick="show('home')">← Home</button><div class="row"><h2>Reservations</h2><button class="btn small" onclick="editReservation()">+ Add</button></div><div id="resList" class="day-list"></div></section>
-  <section id="places" class="view"><button class="back" onclick="show('home')">← Home</button><div class="row"><h2>Saved Places</h2><button class="btn small" onclick="editPlace()">+ Add</button></div><div id="placeList" class="day-list"></div></section>
-  <section id="hunts" class="view"><button class="back" onclick="show('home')">← Home</button><h2>Family Hunts</h2><div class="grid"><a class="card" href="Everley_Hunt_GALLERY.html"><div class="emoji">👑</div><h4>Everley</h4><p>Royal Treasure Hunt</p></a><a class="card" href="Ethan_Hunt_GALLERY.html"><div class="emoji">⚔️</div><h4>Ethan</h4><p>Adventure Hunt</p></a><a class="card" href="Elizabeth_Hunt_GALLERY.html"><div class="emoji">👸</div><h4>Elizabeth</h4><p>England Birthday Hunt</p></a></div></section>
-  <section id="explore" class="view"><div class="search"><input class="input" id="q" placeholder="Search Waypoint…" oninput="renderSearch()"></div><div id="searchResults" class="day-list"></div></section>
-  <section id="builder" class="view"><button class="back" onclick="show('home')">← Home</button><h2>Trip Builder</h2><div class="notice"><b>Privacy:</b> edits, journal entries, and reservations save only on this device. Use Export Backup to save a copy to Files or iCloud Drive.</div><div class="section"><h3>Trip Tools</h3><div class="grid"><div class="card" onclick="show('itinerary')"><div class="emoji">📅</div><h4>Edit itinerary</h4><p>Add days and activities.</p></div><div class="card" onclick="show('reservations')"><div class="emoji">🎟️</div><h4>Reservations</h4><p>Add confirmations.</p></div><div class="card" onclick="show('places')"><div class="emoji">📍</div><h4>Saved places</h4><p>Pubs, hikes, fishing.</p></div></div></div></section>
-  <section id="settings" class="view"><h2>Settings</h2><div class="day-list"><div class="day"><h3>Storage</h3><p class="mini">Local-only storage is active. Your entries are not uploaded to GitHub or any server.</p><div class="tools"><button class="btn small" onclick="exportData()">Export Backup</button><label class="btn light small">Import Backup<input type="file" accept="application/json" onchange="importData(event)" hidden></label><button class="btn danger small" onclick="resetTrip()">Reset Local Data</button></div></div><div class="day"><h3>Version</h3><p class="mini">Waypoint v1.4 — England Adventure Engine</p></div></div></section>
+  <main id="main" class="main"></main>
+
+  <nav class="tabbar" aria-label="Main navigation">
+    <button data-route="home" class="tab active">🏠<span>Home</span></button>
+    <button data-route="england" class="tab">🇬🇧<span>England</span></button>
+    <button data-route="journal" class="tab">📷<span>Journal</span></button>
+    <button data-route="settings" class="tab">⚙️<span>Settings</span></button>
+  </nav>
 </div>
 
-<div class="tabs"><div class="tabbar"><button class="tab active" data-tab="home" onclick="show('home')"><span>🏠</span>Home</button><button class="tab" data-tab="explore" onclick="show('explore')"><span>🔍</span>Search</button><button class="tab" data-tab="builder" onclick="show('builder')"><span>✏️</span>Builder</button><button class="tab" data-tab="settings" onclick="show('settings')"><span>⚙️</span>Settings</button></div></div>
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="modalTitle">Edit</h2>
+      <button class="icon-button" id="closeModal">✕</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
 
-<div class="modal" id="modal"><div class="sheet"><div id="modalContent"></div></div></div>
-<script>
-const VERSION='1.4';
-const KEY='waypoint_england_v14';
-const seed={trip:{name:'England Adventure 2026',start:'2026-07-06',end:'2026-08-07',travelers:['Ryan','Julie','Elizabeth','Ethan','Everley']},
-days:[
-{date:'2026-07-06',place:'London',stay:'Park Plaza Victoria',activities:[{time:'Arrival',title:'Arrive in London',notes:'Keep the day simple: check in, food, light walk near Victoria.'},{time:'Afternoon',title:'Harrods / easy exploring',notes:'Good first-day jet lag option.'}]},
-{date:'2026-07-07',place:'London',stay:'Park Plaza Victoria',activities:[{time:'Morning',title:'Central London sights',notes:'Use this as a flexible day.'},{time:'Evening',title:'Historic pub or relaxed dinner',notes:'Keep walking distance reasonable.'}]},
-{date:'2026-07-08',place:'London',stay:'Park Plaza Victoria',activities:[{time:'Day',title:'London planned activities',notes:'Add ticket times as you confirm them.'}]},
-{date:'2026-07-09',place:'London / Watford',stay:'Park Plaza Victoria',activities:[{time:'Day',title:'Warner Bros. Studio Tour',notes:'Train to Watford Junction, then shuttle to the studio.'}]},
-{date:'2026-07-10',place:'London',stay:'Park Plaza Victoria',activities:[{time:'Day',title:'Final London day',notes:'Use for anything missed, shopping, or slower exploring.'}]},
-{date:'2026-07-11',place:'Cambridge',stay:'Cambridge lodging',activities:[{time:'Travel',title:'Train to Cambridge',notes:'Settle in and explore the historic center.'},{time:'Afternoon',title:'Punting / riverside walk',notes:'DIY or guided punting depending on weather and energy.'}]},
-{date:'2026-07-12',place:'Cambridge',stay:'Cambridge lodging',activities:[{time:'Day',title:'Colleges, bridges, and Sunday roast',notes:'Add final roast choice here.'}]},
-{date:'2026-07-13',place:'York',stay:'York lodging',activities:[{time:'Travel',title:'Train to York',notes:'Elizabeth birthday arrival day.'},{time:'Evening',title:'Elizabeth birthday dinner',notes:'Historic city center with wow factor.'}]},
-{date:'2026-07-14',place:'York',stay:'York lodging',activities:[{time:'Morning',title:'York Minster and city walls',notes:'Great history day.'},{time:'Afternoon',title:'The Shambles',notes:'Use the scavenger hunts here.'}]},
-{date:'2026-07-15',place:'York',stay:'York lodging',activities:[{time:'Day',title:'Flexible York day',notes:'Museums, ghost walk, or slower family day.'}]},
-{date:'2026-07-16',place:'Whitby',stay:'Whitby overnight',activities:[{time:'Travel',title:'York to Whitby',notes:'Coastal change of scenery.'},{time:'Afternoon',title:'Whitby Abbey / harbor',notes:'Add parking notes.'}]},
-{date:'2026-07-17',place:'Yorkshire Dales',stay:'Dales lodging',activities:[{time:'Travel',title:'Arrive in the Dales',notes:'Groceries, settle in, short village walk.'}]},
-{date:'2026-07-18',place:'Yorkshire Dales',stay:'Dales lodging',activities:[{time:'Day',title:'Waterfalls and village walk',notes:'Add final route and parking.'}]},
-{date:'2026-07-19',place:'Yorkshire Dales',stay:'Dales lodging',activities:[{time:'Day',title:'Sunday roast in the Dales',notes:'Add confirmed pub.'}]},
-{date:'2026-07-20',place:'Yorkshire Dales',stay:'Dales lodging',activities:[{time:'Day',title:'Hiking / adventure day',notes:'Flexible based on weather.'}]},
-{date:'2026-07-21',place:'Yorkshire Dales',stay:'Dales lodging',activities:[{time:'Day',title:'Village-to-village walk',notes:'Look for pubs and views.'}]},
-{date:'2026-07-22',place:'Yorkshire Dales',stay:'Dales lodging',activities:[{time:'Day',title:'Fly fishing / countryside day',notes:'Add guide or permit details.'}]},
-{date:'2026-07-23',place:'Yorkshire Dales',stay:'Dales lodging',activities:[{time:'Day',title:'Final Dales full day',notes:'Use as weather backup.'}]},
-{date:'2026-07-24',place:'Yorkshire Dales',stay:'Dales lodging',activities:[{time:'Day',title:'Pack and easy exploring',notes:'Prepare for Cotswolds transfer.'}]},
-{date:'2026-07-25',place:'Cotswolds',stay:'Cotswolds lodging',activities:[{time:'Travel',title:'Travel to the Cotswolds',notes:'Settle in; easy village dinner.'}]},
-{date:'2026-07-26',place:'Cotswolds',stay:'Cotswolds lodging',activities:[{time:'Day',title:'Chipping Campden / Broadway',notes:'North Cotswolds villages.'}]},
-{date:'2026-07-27',place:'Cotswolds',stay:'Cotswolds lodging',activities:[{time:'Day',title:'Walking loop / village day',notes:'Add chosen route.'}]},
-{date:'2026-07-28',place:'Cotswolds',stay:'Cotswolds lodging',activities:[{time:'Day',title:'Diddly Squat / Farmer’s Dog idea',notes:'Check hours and crowds.'}]},
-{date:'2026-07-29',place:'Cotswolds',stay:'Cotswolds lodging',activities:[{time:'Day',title:'Fly fishing / Fairford area',notes:'River Coln / The Bull Hotel idea.'}]},
-{date:'2026-07-30',place:'Cotswolds',stay:'Cotswolds lodging',activities:[{time:'Day',title:'Flexible Cotswolds day',notes:'Use for weather or rest.'}]},
-{date:'2026-07-31',place:'Cotswolds',stay:'Cotswolds lodging',activities:[{time:'Day',title:'Final Cotswolds day',notes:'Favorite village revisit.'}]},
-{date:'2026-08-01',place:'Castle Combe',stay:'Castle Combe lodging',activities:[{time:'Travel',title:'Move to Castle Combe',notes:'Slow scenic transfer.'}]},
-{date:'2026-08-02',place:'Castle Combe',stay:'Castle Combe lodging',activities:[{time:'Day',title:'Castle Combe village day',notes:'Photos, walks, relaxed pace.'}]},
-{date:'2026-08-03',place:'Castle Combe',stay:'Castle Combe lodging',activities:[{time:'Day',title:'Nearby villages / countryside',notes:'Add day trip ideas.'}]},
-{date:'2026-08-04',place:'Castle Combe',stay:'Castle Combe lodging',activities:[{time:'Day',title:'Final full day',notes:'Keep flexible.'}]},
-{date:'2026-08-05',place:'Castle Combe / Transfer',stay:'Final area lodging TBD',activities:[{time:'Day',title:'Transition day',notes:'Add actual lodging or plans.'}]},
-{date:'2026-08-06',place:'Winchester',stay:'Winchester overnight',activities:[{time:'Day',title:'Winchester day',notes:'Great Hall, cathedral area, St Catherine’s Hill.'}]},
-{date:'2026-08-07',place:'Fly Home',stay:'',activities:[{time:'Travel',title:'Fly home',notes:'Return car / airport transfer details.'}]}
-],
-reservations:[{type:'Attraction',date:'2026-07-09',name:'Warner Bros. Studio Tour',notes:'Add ticket time and confirmation.'},{type:'Lodging',date:'2026-07-06',name:'Park Plaza Victoria London',notes:'July 6–11.'}],
-places:[{category:'Restaurant',name:'Elizabeth birthday dinner — York',location:'York historic city center',notes:'Choose final restaurant and add reservation.'},{category:'Hike',name:'Yorkshire Dales waterfall walk',location:'Yorkshire Dales',notes:'Add final route and parking.'},{category:'Fishing',name:'River Coln / Fairford idea',location:'Cotswolds',notes:'Add permit/guide details.'},{category:'Pub',name:'Sunday roast shortlist',location:'Cambridge / Dales',notes:'Add confirmed options.'}],journal:{},settings:{theme:'system'}};
-let data=load();
-function load(){try{return JSON.parse(localStorage.getItem(KEY))||structuredClone(seed)}catch(e){return structuredClone(seed)}}
-function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll()}
-function fmt(d){let x=new Date(d+'T12:00:00');return x.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}
-function todayIndex(){let now=new Date();let today=now.toISOString().slice(0,10);let i=data.days.findIndex(d=>d.date===today);if(i>-1)return i;let start=data.days[0].date,end=data.days[data.days.length-1].date;if(today<start)return 0;if(today>end)return data.days.length-1;return 0}
-function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));window.scrollTo(0,0);renderAll()}
-function renderAll(){renderHome();renderToday();renderDays();renderJournalList();renderReservations();renderPlaces();renderSearch();applyTheme()}
-function renderHome(){let start=new Date(data.trip.start+'T12:00'),end=new Date(data.trip.end+'T12:00'),now=new Date();let pct=Math.max(0,Math.min(100,((now-start)/(end-start))*100));document.getElementById('tripProgress').style.width=pct+'%';document.getElementById('heroText').textContent=`${data.trip.name}: ${data.days.length} days from ${fmt(data.trip.start)} to ${fmt(data.trip.end)}. Local-only storage is active.`}
-function renderToday(){let i=todayIndex(),d=data.days[i],j=data.journal[d.date]||{};document.getElementById('todayWrap').innerHTML=`<div class="hero"><h2>Today: ${d.place}</h2><p>${fmt(d.date)} · Day ${i+1} of ${data.days.length}${d.stay?' · Staying: '+escapeHTML(d.stay):''}</p><div class="hero-actions"><button class="btn" onclick="editDay(${i})">Edit Day</button><button class="btn secondary" onclick="openJournal('${d.date}')">Journal</button></div></div><div class="section"><h3>Plan</h3><div class="day">${activitiesHTML(d)}</div></div><div class="section"><h3>Journal Snapshot</h3><div class="day"><p class="mini">${escapeHTML(j.favorite||'No favorite memory added yet.')}</p></div></div>`}
-function activitiesHTML(d){return (d.activities||[]).map(a=>`<div class="activity"><div class="time">${escapeHTML(a.time||'')}</div><div><div class="act-title">${escapeHTML(a.title||'Untitled')}</div><div class="act-notes">${escapeHTML(a.notes||'')}</div></div></div>`).join('')||'<p class="mini">No activities yet.</p>'}
-function renderDays(){document.getElementById('days').innerHTML=data.days.map((d,i)=>`<div class="day"><div class="day-head"><div><div class="date">${fmt(d.date)}</div><div class="place">${escapeHTML(d.place)}</div><div class="mini">${escapeHTML(d.stay||'No lodging entered')}</div></div><button class="btn light small" onclick="editDay(${i})">Edit</button></div>${activitiesHTML(d)}<div class="tools"><button class="btn small" onclick="openJournal('${d.date}')">Journal</button><button class="btn light small" onclick="addActivity(${i})">+ Activity</button></div></div>`).join('')}
-function renderJournalList(){document.getElementById('journalList').innerHTML=data.days.map(d=>{let j=data.journal[d.date]||{};return `<div class="day"><div class="row"><div><div class="date">${fmt(d.date)}</div><div class="place">${escapeHTML(d.place)}</div></div><button class="btn light small" onclick="openJournal('${d.date}')">Edit</button></div><div class="chips"><span class="chip">⭐ ${escapeHTML(j.favorite||'Favorite memory')}</span><span class="chip">😂 ${escapeHTML(j.funny||'Funniest moment')}</span><span class="chip">🍽️ ${escapeHTML(j.meal||'Best meal')}</span></div><p class="mini" style="margin-top:10px">${escapeHTML((j.notes||'No journal entry yet.').slice(0,160))}</p></div>`}).join('')}
-function renderReservations(){document.getElementById('resList').innerHTML=data.reservations.map((r,i)=>`<div class="day"><div class="row"><div><div class="date">${escapeHTML(r.type||'Reservation')} · ${r.date?fmt(r.date):'No date'}</div><div class="place">${escapeHTML(r.name)}</div><p class="mini">${escapeHTML(r.notes||'')}</p></div><button class="btn light small" onclick="editReservation(${i})">Edit</button></div></div>`).join('')||'<div class="empty">No reservations yet.</div>'}
-function renderPlaces(){document.getElementById('placeList').innerHTML=data.places.map((p,i)=>`<div class="day"><div class="row"><div><div class="date">${escapeHTML(p.category||'Place')} · ${escapeHTML(p.location||'')}</div><div class="place">${escapeHTML(p.name)}</div><p class="mini">${escapeHTML(p.notes||'')}</p></div><button class="btn light small" onclick="editPlace(${i})">Edit</button></div></div>`).join('')||'<div class="empty">No saved places yet.</div>'}
-function renderSearch(){let q=(document.getElementById('q')?.value||'').toLowerCase();let out=[];if(q){data.days.forEach((d,i)=>{let hay=JSON.stringify(d).toLowerCase();if(hay.includes(q))out.push(`<div class="day" onclick="show('itinerary')"><div class="date">Itinerary · ${fmt(d.date)}</div><div class="place">${escapeHTML(d.place)}</div><p class="mini">${escapeHTML((d.activities||[]).map(a=>a.title).join(', '))}</p></div>`)});data.places.forEach(p=>{if(JSON.stringify(p).toLowerCase().includes(q))out.push(`<div class="day" onclick="show('places')"><div class="date">Saved Place · ${escapeHTML(p.category)}</div><div class="place">${escapeHTML(p.name)}</div><p class="mini">${escapeHTML(p.location||'')}</p></div>`)})}document.getElementById('searchResults').innerHTML=q?(out.join('')||'<div class="empty">No results found.</div>'):'<div class="empty">Search itinerary, reservations, and saved places.</div>'}
-function modal(html){document.getElementById('modalContent').innerHTML=html;document.getElementById('modal').classList.add('show')}
-function closeModal(){document.getElementById('modal').classList.remove('show')}
-document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()})
-function editDay(i){let d=i!=null?data.days[i]:{date:'2026-07-06',place:'New Day',stay:'',activities:[]};modal(`<h3>${i!=null?'Edit Day':'Add Day'}</h3><div class="form"><input class="input" id="fdate" type="date" value="${d.date}"><input class="input" id="fplace" placeholder="Place" value="${escapeAttr(d.place)}"><input class="input" id="fstay" placeholder="Lodging / stay" value="${escapeAttr(d.stay||'')}"><button class="btn" onclick="saveDay(${i==null?'null':i})">Save Day</button>${i!=null?`<button class="btn danger" onclick="deleteDay(${i})">Delete Day</button>`:''}<button class="btn light" onclick="closeModal()">Cancel</button></div>`)}
-function saveDay(i){let d={date:val('fdate'),place:val('fplace'),stay:val('fstay'),activities:i!=null?data.days[i].activities:[]};if(i==null)data.days.push(d);else data.days[i]=d;data.days.sort((a,b)=>a.date.localeCompare(b.date));closeModal();save()}
-function deleteDay(i){if(confirm('Delete this day?')){data.days.splice(i,1);closeModal();save()}}
-function addActivity(i){modal(`<h3>Add Activity</h3><div class="form"><input class="input" id="atime" placeholder="Time (Morning, 2:00 PM, etc.)"><input class="input" id="atitle" placeholder="Activity title"><textarea id="anotes" placeholder="Notes, parking, tickets, etc."></textarea><button class="btn" onclick="saveActivity(${i})">Save Activity</button><button class="btn light" onclick="closeModal()">Cancel</button></div>`)}
-function saveActivity(i){data.days[i].activities.push({time:val('atime'),title:val('atitle'),notes:val('anotes')});closeModal();save()}
-function openJournal(date){date=date||data.days[todayIndex()].date;let j=data.journal[date]||{};modal(`<h3>Journal · ${fmt(date)}</h3><div class="form"><input class="input" id="jfav" placeholder="Favorite memory" value="${escapeAttr(j.favorite||'')}"><input class="input" id="jfun" placeholder="Funniest moment" value="${escapeAttr(j.funny||'')}"><input class="input" id="jmeal" placeholder="Best meal" value="${escapeAttr(j.meal||'')}"><textarea id="jnotes" placeholder="What happened today?">${escapeHTML(j.notes||'')}</textarea><input class="input" id="jphoto" placeholder="Photo note or file name (optional)" value="${escapeAttr(j.photo||'')}"><button class="btn" onclick="saveJournal('${date}')">Save Journal</button><button class="btn light" onclick="closeModal()">Cancel</button></div>`)}
-function saveJournal(date){data.journal[date]={favorite:val('jfav'),funny:val('jfun'),meal:val('jmeal'),notes:val('jnotes'),photo:val('jphoto')};closeModal();save()}
-function editReservation(i){let r=i!=null?data.reservations[i]:{type:'',date:'',name:'',notes:''};modal(`<h3>${i!=null?'Edit':'Add'} Reservation</h3><div class="form"><input class="input" id="rtype" placeholder="Type: Hotel, ticket, dinner…" value="${escapeAttr(r.type||'')}"><input class="input" id="rdate" type="date" value="${r.date||''}"><input class="input" id="rname" placeholder="Name" value="${escapeAttr(r.name||'')}"><textarea id="rnotes" placeholder="Confirmation, address, notes">${escapeHTML(r.notes||'')}</textarea><button class="btn" onclick="saveReservation(${i==null?'null':i})">Save</button>${i!=null?`<button class="btn danger" onclick="deleteReservation(${i})">Delete</button>`:''}<button class="btn light" onclick="closeModal()">Cancel</button></div>`)}
-function saveReservation(i){let r={type:val('rtype'),date:val('rdate'),name:val('rname'),notes:val('rnotes')};if(i==null)data.reservations.push(r);else data.reservations[i]=r;closeModal();save()}
-function deleteReservation(i){if(confirm('Delete reservation?')){data.reservations.splice(i,1);closeModal();save()}}
-function editPlace(i){let p=i!=null?data.places[i]:{category:'',name:'',location:'',notes:''};modal(`<h3>${i!=null?'Edit':'Add'} Place</h3><div class="form"><input class="input" id="pcat" placeholder="Category" value="${escapeAttr(p.category||'')}"><input class="input" id="pname" placeholder="Name" value="${escapeAttr(p.name||'')}"><input class="input" id="ploc" placeholder="Location" value="${escapeAttr(p.location||'')}"><textarea id="pnotes" placeholder="Notes">${escapeHTML(p.notes||'')}</textarea><button class="btn" onclick="savePlace(${i==null?'null':i})">Save</button>${i!=null?`<button class="btn danger" onclick="deletePlace(${i})">Delete</button>`:''}<button class="btn light" onclick="closeModal()">Cancel</button></div>`)}
-function savePlace(i){let p={category:val('pcat'),name:val('pname'),location:val('ploc'),notes:val('pnotes')};if(i==null)data.places.push(p);else data.places[i]=p;closeModal();save()}
-function deletePlace(i){if(confirm('Delete place?')){data.places.splice(i,1);closeModal();save()}}
-function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Waypoint_England_Adventure_Backup.json';a.click();URL.revokeObjectURL(a.href)}
-function importData(e){let f=e.target.files[0];if(!f)return;let rd=new FileReader();rd.onload=()=>{try{data=JSON.parse(rd.result);save();alert('Backup imported.')}catch(err){alert('That backup file could not be read.')}};rd.readAsText(f)}
-function resetTrip(){if(confirm('Reset local Waypoint data on this device?')){localStorage.removeItem(KEY);data=structuredClone(seed);save()}}
-function applyTheme(){let t=data.settings?.theme||'system';let dark=t==='dark'||(t==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=dark?'dark':'light'}
-document.getElementById('themeBtn').onclick=()=>{data.settings=data.settings||{};data.settings.theme=(data.settings.theme==='dark')?'light':(data.settings.theme==='light'?'system':'dark');save()}
-function val(id){return document.getElementById(id).value.trim()}function escapeHTML(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}function escapeAttr(s){return escapeHTML(s).replace(/'/g,'&#39;')}
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
-renderAll();
-</script>
+<input id="importFile" type="file" accept="application/json,.json,.waypoint" hidden />
+<script src="js/default-data.js"></script>
+<script src="js/db.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
