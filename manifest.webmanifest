@@ -1,1 +1,1 @@
-{"name":"Waypoint","short_name":"Waypoint","start_url":"./","display":"standalone","background_color":"#0f172a","theme_color":"#0f766e","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}
+{"name":"Waypoint","short_name":"Waypoint","start_url":"./","display":"standalone","background_color":"#0d141c","theme_color":"#102033","description":"Ryan's local-first personal command center.","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
