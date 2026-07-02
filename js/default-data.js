@@ -1,5 +1,5 @@
 window.WAYPOINT_DEFAULT_DATA={
- version:'2.0.0',
+ version:'2.1.0',
  trips:[{
   id:'england-2026', name:'England Adventure 2026', emoji:'🇬🇧', start:'2026-07-06', end:'2026-08-07', travelers:['Ryan','Julie','Elizabeth','Ethan','Everley'],
   destinations:[
