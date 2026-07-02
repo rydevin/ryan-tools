@@ -2,10 +2,10 @@
   "name": "Waypoint",
   "short_name": "Waypoint",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f1ea",
-  "theme_color": "#17233a",
-  "icons": [
-    {"src":"icon.svg","sizes":"any","type":"image/svg+xml"}
-  ]
+  "background_color": "#102A43",
+  "theme_color": "#102A43",
+  "description": "Ryan's personal toolkit for travel, real estate, family, fishing, hiking, and 3D printing.",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
