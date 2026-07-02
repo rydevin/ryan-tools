@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>📷 Elizabeth's Chief Investigator Hunt</title>
+<style>
+:root{--plum:#4A235A;--violet:#7D3C98;--gold:#B7950B;--gold-lt:#F9F3E3;--navy:#1B2631;--cream:#FAF8F5;--warm:#F2EBE3;--mid:#888;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--cream);font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;color:var(--navy);}
+.top-nav{position:sticky;top:0;z-index:100;background:var(--plum);padding:14px 20px 12px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 12px rgba(74,35,90,.4);}
+.nav-back{font-size:16px;cursor:pointer;color:var(--gold);font-weight:700;letter-spacing:.5px;}
+.nav-title{font-size:17px;font-weight:700;font-style:italic;color:#fff;flex:1;}
+.nav-score{font-size:15px;font-weight:900;color:var(--gold);}
+#screen-cover{display:flex;flex-direction:column;background:var(--plum);}
+.cover-hero{width:100%;height:240px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.cover-hero-emoji{font-size:80px;letter-spacing:12px;filter:drop-shadow(1px 3px 8px rgba(0,0,0,.4));}
+.cover-body{padding:28px 28px 28px;}
+.cover-rule{width:44px;height:1.5px;background:var(--gold);margin-bottom:14px;}
+.cover-eye{font-size:10px;letter-spacing:5px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.cover-title{font-size:42px;font-weight:900;color:#fff;line-height:1.05;margin-bottom:6px;}
+.cover-title em{font-style:italic;color:var(--gold);}
+.cover-sub{font-size:17px;font-style:italic;color:rgba(255,255,255,.5);margin-bottom:18px;}
+.cover-badge{display:inline-block;border:1.5px solid var(--gold);color:var(--gold);font-size:11px;letter-spacing:3px;font-weight:700;text-transform:uppercase;padding:7px 16px;margin-bottom:18px;}
+.cover-desc{color:rgba(255,255,255,.5);font-size:14px;line-height:1.8;font-weight:300;margin-bottom:22px;}
+.prog-wrap{background:rgba(255,255,255,.1);height:1.5px;margin-bottom:8px;}
+.prog-bar{height:1.5px;background:var(--gold);transition:width .5s;}
+.prog-label{font-size:11px;letter-spacing:3px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:22px;}
+.loc-cards{display:flex;flex-direction:column;border-top:1px solid rgba(255,255,255,.08);}
+.loc-card{cursor:pointer;display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.08);transition:background .15s;}
+.loc-card:active{background:rgba(255,255,255,.05);}
+.loc-card.is-bday{border-left:3px solid #C0392B;background:rgba(192,57,43,.07);}
+.loc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-right:14px;}
+.loc-info{flex:1;}
+.loc-name{font-size:17px;font-weight:700;color:rgba(255,255,255,.85);}
+.loc-name em{font-style:italic;color:var(--gold);}
+.loc-prog-text{font-size:11px;letter-spacing:.5px;font-weight:700;color:rgba(255,255,255,.3);margin-top:3px;text-transform:uppercase;}
+.loc-mini-wrap{background:rgba(255,255,255,.07);height:1px;margin-top:8px;}
+.loc-mini-bar{height:1px;background:var(--gold);transition:width .4s;}
+.loc-arrow{font-size:16px;color:rgba(255,255,255,.18);}
+.reset-btn{display:block;margin:22px auto 36px;background:none;border:1px solid rgba(255,255,255,.1);padding:10px 24px;color:rgba(255,255,255,.22);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:2px;text-transform:uppercase;}
+#screen-location{display:none;flex-direction:column;min-height:100vh;}
+.loc-hero{width:100%;height:200px;display:flex;align-items:center;justify-content:center;position:relative;}
+.loc-hero-emoji{font-size:80px;filter:drop-shadow(1px 3px 6px rgba(0,0,0,.4));}
+.loc-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(26,19,38,.75) 100%);}
+.loc-hero-header{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 16px;}
+.loc-hero-eye{font-size:9px;letter-spacing:4px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:3px;}
+.loc-hero-title{font-size:32px;font-weight:900;color:#fff;text-shadow:1px 2px 6px rgba(0,0,0,.4);}
+.loc-prog-bar-wrap{height:2px;background:#E8E0F0;}
+.loc-prog-bar{height:2px;transition:width .4s;}
+.loc-body{padding:20px 20px 100px;background:var(--cream);}
+.sec-head{font-size:10px;letter-spacing:4px;font-weight:900;text-transform:uppercase;color:var(--c,var(--violet));margin:26px 0 14px;display:flex;align-items:center;gap:10px;}
+.sec-head:first-child{margin-top:0;}
+.sec-head::after{content:'';flex:1;height:1px;background:var(--c,var(--violet));opacity:.2;}
+.item-list{display:flex;flex-direction:column;gap:9px;}
+.item{display:flex;align-items:center;gap:13px;background:#fff;padding:13px 15px;cursor:pointer;border-bottom:1px solid #EEE;transition:background .2s;}
+.item:active{transform:scale(.99);}
+.item.done{background:#F8F5FC;}
+.item.done .itext{text-decoration:line-through;color:var(--mid);}
+.icheck{width:22px;height:22px;border:2px solid var(--c,var(--violet));border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;background:#fff;}
+.item.done .icheck{background:var(--c,var(--violet));color:#fff;border-color:var(--c,var(--violet));}
+.itext{font-size:15px;font-weight:700;flex:1;line-height:1.3;}
+.mitem{display:flex;align-items:flex-start;gap:13px;background:var(--warm);padding:14px 15px;cursor:pointer;border-left:3px solid var(--gold);}
+.mitem:active{transform:scale(.99);}
+.mitem.done{opacity:.65;}
+.mitem.done .itext{text-decoration:line-through;}
+.micon{font-size:20px;flex-shrink:0;}
+.mtext-wrap{flex:1;}
+.mtext-wrap strong{display:block;font-size:14px;font-weight:900;margin-bottom:2px;}
+.mtext-wrap span{font-size:13px;color:#666;line-height:1.4;}
+.mcheck{width:20px;height:20px;border:1.5px solid var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:#fff;margin-top:2px;}
+.mitem.done .mcheck{background:var(--gold);color:#fff;}
+#screen-birthday{display:none;flex-direction:column;min-height:100vh;background:linear-gradient(160deg,#1B2631 0%,#4A235A 100%);}
+.bday-nav{position:sticky;top:0;z-index:100;background:rgba(26,19,38,.92);padding:14px 20px 12px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(8px);}
+.bday-body{padding:28px 22px 80px;position:relative;overflow:hidden;}
+.bday-body::before{content:'14';position:absolute;right:-10px;bottom:-30px;font-size:220px;font-weight:900;font-style:italic;color:rgba(255,255,255,.04);line-height:1;pointer-events:none;}
+.bday-rule{width:44px;height:1.5px;background:var(--gold);margin-bottom:14px;}
+.bday-eye{font-size:10px;letter-spacing:5px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.bday-title{font-size:38px;font-weight:900;color:#fff;line-height:1.05;margin-bottom:6px;}
+.bday-title em{font-style:italic;color:var(--gold);}
+.bday-sub{font-size:16px;font-style:italic;color:rgba(255,255,255,.45);margin-bottom:26px;}
+.bday-divider{width:100%;height:1px;background:rgba(183,149,11,.25);margin-bottom:22px;}
+.bday-sec{font-size:10px;letter-spacing:4px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:14px;}
+.bday-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:22px;}
+.bday-item{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:rgba(255,255,255,.82);padding:9px 11px;border:1px solid rgba(183,149,11,.2);background:rgba(255,255,255,.03);cursor:pointer;}
+.bday-item:active{transform:scale(.97);}
+.bday-item.done{border-color:var(--gold);background:rgba(183,149,11,.09);}
+.bday-item.done span{text-decoration:line-through;opacity:.55;}
+.bday-check{width:17px;height:17px;border:1.5px solid var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;background:transparent;}
+.bday-item.done .bday-check{background:var(--gold);color:#fff;}
+.bday-prog{font-size:11px;letter-spacing:2px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;margin:8px 0 22px;}
+.rewards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:26px;}
+.reward-card{padding:14px;background:rgba(255,255,255,.05);border:1px solid rgba(183,149,11,.25);text-align:center;}
+.reward-icon{font-size:26px;margin-bottom:5px;}
+.reward-text{font-size:13px;font-weight:700;color:rgba(255,255,255,.82);}
+.level-banner{background:var(--gold);padding:16px;text-align:center;}
+.level-title{font-size:20px;font-weight:900;color:var(--plum);}
+.level-sub{font-size:10px;letter-spacing:3px;font-weight:700;color:rgba(74,35,90,.6);text-transform:uppercase;margin-top:3px;}
+.celebration{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);align-items:center;justify-content:center;}
+.celebration.show{display:flex;}
+.cel-box{background:var(--plum);border:1px solid var(--gold);padding:32px 22px;text-align:center;max-width:300px;width:90%;animation:popIn .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.cel-emoji{font-size:52px;margin-bottom:10px;}
+.cel-title{font-size:24px;font-weight:900;color:var(--gold);margin-bottom:8px;}
+.cel-msg{font-size:13px;color:rgba(255,255,255,.65);margin-bottom:22px;line-height:1.6;font-style:italic;}
+.cel-btn{background:var(--gold);color:var(--plum);border:none;font-size:15px;font-weight:900;padding:12px 28px;cursor:pointer;}
+.confetti-piece{position:fixed;pointer-events:none;z-index:300;animation:fall 2.5s ease-in forwards;}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* ── Gallery ───────────────────────────────── */
+.loc-hero{position:relative;background-size:cover;background-position:center;}
+.loc-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1) 0%,rgba(0,0,0,.6) 100%);}
+.gallery-strip-wrap{background:#111;padding:10px 12px;display:flex;align-items:center;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.gallery-strip-wrap::-webkit-scrollbar{display:none;}
+.gallery-add-btn{flex-shrink:0;width:62px;height:62px;border-radius:10px;border:2px dashed rgba(255,255,255,.4);background:rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:2px;}
+.gallery-add-btn:active{background:rgba(255,255,255,.14);}
+.gallery-add-icon{font-size:22px;}
+.gallery-add-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.5px;text-transform:uppercase;}
+.gallery-thumb{flex-shrink:0;width:62px;height:62px;border-radius:10px;object-fit:cover;cursor:pointer;border:2.5px solid transparent;transition:border-color .15s;}
+.gallery-thumb:active{border-color:rgba(255,255,255,.6);}
+.gallery-empty{font-size:11px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.5px;padding:0 4px;align-self:center;}
+#photo-input{display:none;}
+.lightbox{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.96);flex-direction:column;}
+.lightbox.show{display:flex;}
+.lightbox-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;flex-shrink:0;}
+.lightbox-counter{color:rgba(255,255,255,.55);font-size:13px;font-weight:700;}
+.lightbox-actions{display:flex;gap:10px;align-items:center;}
+.lb-del-btn{background:rgba(255,60,60,.2);border:1px solid rgba(255,80,80,.5);border-radius:20px;color:#FF7070;font-size:13px;font-weight:700;padding:6px 14px;cursor:pointer;}
+.lb-del-btn:active{background:rgba(255,60,60,.4);}
+.lb-close-btn{background:rgba(255,255,255,.1);border:none;border-radius:50%;width:34px;height:34px;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.lb-close-btn:active{background:rgba(255,255,255,.2);}
+.lightbox-img-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0 8px;}
+.lightbox-img{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px;}
+.lightbox-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;flex-shrink:0;}
+.lb-nav-btn{background:rgba(255,255,255,.1);border:none;border-radius:50%;width:46px;height:46px;color:#fff;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.lb-nav-btn:active{background:rgba(255,255,255,.2);}
+.lb-nav-btn:disabled{opacity:.2;pointer-events:none;}
+.lightbox-dots{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:60%;}
+.lb-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .15s;}
+.lb-dot.active{background:#fff;}
+
+
+.lb-confirm{display:none;position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(10,5,20,.97);padding:20px 24px 40px;flex-direction:column;align-items:center;gap:14px;border-top:1px solid rgba(255,255,255,.15);}
+.lb-confirm.show{display:flex;}
+.lb-confirm-msg{color:#fff;font-size:17px;font-weight:700;text-align:center;}
+.lb-confirm-yes{background:#C0392B;border:none;color:#fff;font-size:16px;font-weight:900;padding:14px 0;border-radius:12px;width:100%;cursor:pointer;}
+.lb-confirm-yes:active{background:#a93226;}
+.lb-confirm-no{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.25);color:#fff;font-size:16px;font-weight:700;padding:14px 0;border-radius:12px;width:100%;cursor:pointer;}
+.lb-confirm-no:active{background:rgba(255,255,255,.18);}
+
+</style>
+</head>
+<body>
+<div id="screen-cover">
+  <div class="cover-hero" style="background:linear-gradient(160deg,#1B2631,#4A235A,#7D3C98)">
+    <div class="cover-hero-emoji">📷 🏰 🌿</div>
+  </div>
+  <div class="cover-body">
+    <div class="cover-rule"></div>
+    <div class="cover-eye">The Great England Expedition</div>
+    <div class="cover-title"><em>Elizabeth's</em><br>Chief Investigator<br>Hunt</div>
+    <div class="cover-sub">A Travel Journal Adventure</div>
+    <div class="cover-badge">Age 13→14 · Chief Investigator</div>
+    <div class="cover-desc">Document. Discover. Lead. Tap each item as you complete it — progress saves automatically.</div>
+    <div class="prog-wrap"><div class="prog-bar" id="cover-bar" style="width:0%"></div></div>
+    <div class="prog-label" id="cover-label">0 of 43 completed</div>
+  </div>
+  <div class="loc-cards" id="loc-cards"></div>
+  <button class="reset-btn" onclick="resetAll()">Reset all progress</button>
+</div>
+<div id="screen-location">
+  <div class="top-nav">
+    <span class="nav-back" onclick="goHome()">← Back</span>
+    <span class="nav-title" id="nav-title"></span>
+    <span class="nav-score" id="nav-score"></span>
+  </div>
+  <div class="loc-hero" id="loc-hero">
+  <div class="loc-hero-overlay"></div>
+    <div class="loc-hero-emoji" id="loc-hero-emoji"></div>
+      <div class="loc-hero-header">
+      <div class="loc-hero-eye" id="loc-hero-eye"></div>
+      <div class="loc-hero-title" id="loc-hero-title"></div>
+    </div>
+  </div>
+  <div class="loc-prog-bar-wrap"><div class="loc-prog-bar" id="loc-bar"></div></div>
+  <div class="gallery-strip-wrap" id="gallery-strip"></div>
+  <input type="file" id="photo-input" accept="image/*" onchange="handlePhoto(event)">
+
+  <div class="loc-body" id="loc-body"></div>
+</div>
+<div id="screen-birthday">
+  <div class="bday-nav top-nav">
+    <span class="nav-back" onclick="goHome()" style="color:var(--gold)">← Back</span>
+    <span class="nav-title">July 13 · Birthday!</span>
+    <span class="nav-score" id="bday-score"></span>
+  </div>
+  <div class="bday-body">
+    <div class="bday-rule"></div>
+    <div class="bday-eye">July 13 — Special Event</div>
+    <div class="bday-title">Happy <em>14th</em><br>Birthday, Elizabeth</div>
+    <div class="bday-sub">Train to York Day · Fourteen for Fourteen</div>
+    <div class="bday-divider"></div>
+    <div class="bday-sec">Find 14 of each throughout the day</div>
+    <div class="bday-grid" id="bday-grid"></div>
+    <div class="bday-prog" id="bday-prog">0 of 14 completed</div>
+    <div class="bday-divider"></div>
+    <div class="bday-sec">Birthday Rewards</div>
+    <div class="rewards-grid">
+      <div class="reward-card"><div class="reward-icon">📓</div><div class="reward-text">A small journal</div></div>
+      <div class="reward-card"><div class="reward-icon">💍</div><div class="reward-text">British jewellery</div></div>
+      <div class="reward-card"><div class="reward-icon">📚</div><div class="reward-text">Bookstore gift card</div></div>
+      <div class="reward-card"><div class="reward-icon">🍰</div><div class="reward-text">Special dessert in York</div></div>
+    </div>
+    <div class="level-banner">
+      <div class="level-title">🏅 Official Explorer Level 14 🏅</div>
+      <div class="level-sub">Certificate presented at dinner</div>
+    </div>
+  </div>
+</div>
+<div class="celebration" id="celebration">
+  <div class="cel-box">
+    <div class="cel-emoji" id="cel-emoji">📷</div>
+    <div class="cel-title" id="cel-title">Location Complete</div>
+    <div class="cel-msg" id="cel-msg"></div>
+    <button class="cel-btn" onclick="closeCel()">Continue →</button>
+  </div>
+</div>
+<script>
+const BDAY=['14 flowers','14 bicycles','14 stone carvings','14 arches','14 birds','14 funny signs','14 windows','14 steps on an old staircase','14 doors','14 pieces of artwork','14 flags','14 historic details','14 family laughs','14 photos worth keeping'];
+const LOCS=[
+  {id:'london',name:'London',stop:'Stop 01 — Capital City',emoji:'🏙️',color:'#C0392B',lt:'#FDEDEC',bg:'linear-gradient(135deg,#c0392b,#7b241c)',
+   finds:['Best photo of Big Ben','Best hidden alley shot','Best royal-themed photo','Best family photo','Best sunset photo'],
+   missions:[{i:'🏠',h:'Find your London home',t:"One place you'd live if your family moved here."},{i:'⏳',h:'500 years of history',t:"Find somewhere that feels unchanged for five centuries."}]},
+  {id:'cambridge',name:'Cambridge',stop:'Stop 02 — University City',emoji:'🎓',color:'#1E8449',lt:'#EAFAF1',bg:'linear-gradient(135deg,#1e8449,#186a3b)',
+   finds:['Best river photo','Best college courtyard','Best flower display','Best bridge photo'],
+   missions:[{i:'🏛️',h:'Older than Colorado',t:"Find a building predating Colorado statehood (1876)."},{i:'🎓',h:'Favourite college',t:"Pick your favourite college and note why."}]},
+  {id:'birthday',name:'🎂 Birthday!',stop:'July 13',emoji:'🎂',color:'#C0392B',lt:'#FDEDEC',bg:'',isBirthday:true,finds:[],missions:[]},
+  {id:'york',name:'York',stop:'Stop 03 — Medieval City',emoji:'⚔️',color:'#784212',lt:'#FEF5E7',bg:'linear-gradient(135deg,#784212,#6e2c00)',
+   finds:['Best Shambles photo','Best medieval doorway','Best cathedral detail','Best hidden alley'],
+   missions:[{i:'📜',h:'Most interesting historical fact',t:"Find one to share at dinner tonight."},{i:'👻',h:'Find the haunted spot',t:"A place that gives genuinely eerie, ancient vibes."}]},
+  {id:'dales',name:'Yorkshire Dales',stop:'Stop 04 — Wild Country',emoji:'⛰️',color:'#1A5276',lt:'#EBF5FB',bg:'linear-gradient(135deg,#1a5276,#154360)',
+   finds:['Best sheep photo','Best landscape shot','Best waterfall photo','Best family hiking photo'],
+   missions:[{i:'🗻',h:'Favourite view in England',t:"Claim your single favourite view. Defend your choice."}]},
+  {id:'cotswolds',name:'Cotswolds',stop:'Stop 05 — Storybook Villages',emoji:'🌸',color:'#6C3483',lt:'#F4ECF7',bg:'linear-gradient(135deg,#6c3483,#512e81)',
+   finds:['Best cottage photo','Best garden shot','Best village street','Best bakery photo'],
+   missions:[{i:'🏡',h:'Prettiest village',t:"Choose the single prettiest village and justify it."},{i:'✍️',h:'Top 5 Memories',t:"Write your Top 5 favourite memories from the whole trip."}]}
+];
+const TOTAL=LOCS.filter(l=>!l.isBirthday).reduce((s,l)=>s+l.finds.length+l.missions.length,0)+BDAY.length;
+let cur=null;
+let ST={};try{ST=JSON.parse(localStorage.getItem('el_hunt')||'{}')}catch(e){}
+function save(){try{localStorage.setItem('el_hunt',JSON.stringify(ST))}catch(e){}}
+function locDone(l){if(l.isBirthday){return(ST.birthday?.items||[]).filter(Boolean).length;}const s=ST[l.id]||{};return(s.f||[]).filter(Boolean).length+(s.m||[]).filter(Boolean).length;}
+function locTot(l){if(l.isBirthday)return BDAY.length;return l.finds.length+l.missions.length;}
+function renderCover(){
+  const done=LOCS.reduce((s,l)=>s+locDone(l),0),pct=TOTAL?Math.round(done/TOTAL*100):0;
+  document.getElementById('cover-bar').style.width=pct+'%';
+  document.getElementById('cover-label').textContent=done+' of '+TOTAL+' completed';
+  const cards=document.getElementById('loc-cards');cards.innerHTML='';
+  LOCS.forEach(l=>{
+    const d=locDone(l),t=locTot(l),p=t?Math.round(d/t*100):0;
+    const el=document.createElement('div');el.className='loc-card'+(l.isBirthday?' is-bday':'');
+    el.innerHTML='<div class="loc-dot" style="background:'+(d===t?l.color:'rgba(255,255,255,.12)')+'"></div><div class="loc-info"><div class="loc-name">'+(l.isBirthday?'<em>':'')+l.emoji+' '+l.name+(l.isBirthday?'</em>':'')+'</div><div class="loc-prog-text">'+d+' of '+t+' completed'+(d===t?' ✓':'')+'</div><div class="loc-mini-wrap"><div class="loc-mini-bar" style="width:'+p+'%"></div></div></div><div class="loc-arrow">›</div>';
+    el.onclick=()=>l.isBirthday?openBday():openLoc(l.id);cards.appendChild(el);
+  });
+}
+function hideAll(){['screen-cover','screen-location','screen-birthday'].forEach(id=>document.getElementById(id).style.display='none');}
+function openLoc(id){
+  cur=LOCS.find(l=>l.id===id);hideAll();
+  document.getElementById('screen-location').style.display='flex';
+  document.getElementById('nav-title').textContent=cur.name;
+  document.getElementById('loc-hero').style.background=cur.bg;
+  document.getElementById('loc-hero-emoji').textContent=cur.emoji;
+  document.getElementById('loc-hero-eye').textContent=cur.stop;
+  document.getElementById('loc-hero-title').textContent=cur.name;
+  document.getElementById('loc-bar').style.background=cur.color;
+  renderLoc();var _ph=(ST[cur.id]||{}).photos||[];applyHeroBg(_ph.length?_ph[_ph.length-1]:null);renderGalleryStrip();window.scrollTo(0,0);
+}
+function renderLoc(){
+  const l=cur,s=ST[l.id]||{};
+  const f=s.f||Array(l.finds.length).fill(false);
+  const m=s.m||Array(l.missions.length).fill(false);
+  const done=f.filter(Boolean).length+m.filter(Boolean).length,tot=locTot(l);
+  document.getElementById('nav-score').textContent=done+'/'+tot;
+  document.getElementById('loc-bar').style.width=(tot?done/tot*100:0)+'%';
+  const body=document.getElementById('loc-body');body.innerHTML='';
+  const fh=document.createElement('div');fh.className='sec-head';fh.style.cssText='color:'+l.color+';--c:'+l.color;fh.textContent='📸 Photo Challenges';body.appendChild(fh);
+  const fl=document.createElement('div');fl.className='item-list';
+  l.finds.forEach((txt,i)=>{
+    const el=document.createElement('div');el.className='item'+(f[i]?' done':'');el.style.cssText='--c:'+l.color;
+    el.innerHTML='<div class="icheck">'+(f[i]?'✓':'')+'</div><div class="itext">'+txt+'</div>';
+    el.onclick=()=>{if(!ST[l.id])ST[l.id]={};if(!ST[l.id].f)ST[l.id].f=Array(l.finds.length).fill(false);ST[l.id].f[i]=!ST[l.id].f[i];save();checkCel();renderLoc();};
+    fl.appendChild(el);
+  });body.appendChild(fl);
+  if(l.missions.length){
+    const mh=document.createElement('div');mh.className='sec-head';mh.style.cssText='color:'+l.color+';--c:'+l.color;mh.textContent='🔎 Investigator Missions';body.appendChild(mh);
+    const ml=document.createElement('div');ml.className='item-list';
+    l.missions.forEach((ms,i)=>{
+      const el=document.createElement('div');el.className='mitem'+(m[i]?' done':'');
+      el.innerHTML='<div class="micon">'+ms.i+'</div><div class="mtext-wrap"><strong>'+ms.h+'</strong><span>'+ms.t+'</span></div><div class="mcheck" style="border-color:var(--gold);'+(m[i]?'background:var(--gold);color:var(--plum)':'')+'">'+  (m[i]?'✓':'')+'</div>';
+      el.onclick=()=>{if(!ST[l.id])ST[l.id]={};if(!ST[l.id].m)ST[l.id].m=Array(l.missions.length).fill(false);ST[l.id].m[i]=!ST[l.id].m[i];save();checkCel();renderLoc();};
+      ml.appendChild(el);
+    });body.appendChild(ml);
+  }
+}
+function checkCel(){
+  const l=cur,s=ST[l.id]||{};
+  if((s.f||[]).filter(Boolean).length+(s.m||[]).filter(Boolean).length===locTot(l)&&!s.cel){ST[l.id].cel=true;save();
+    document.getElementById('cel-emoji').textContent=l.emoji;
+    document.getElementById('cel-title').textContent=l.name+' Complete';
+    document.getElementById('cel-msg').textContent='Well documented, Chief Investigator. Every challenge in '+l.name+' has been completed.';
+    document.getElementById('celebration').classList.add('show');confetti();
+  }
+}
+function openBday(){
+  hideAll();document.getElementById('screen-birthday').style.display='flex';renderBday();window.scrollTo(0,0);
+}
+function renderBday(){
+  const s=ST.birthday||{},items=s.items||Array(BDAY.length).fill(false),done=items.filter(Boolean).length;
+  document.getElementById('bday-score').textContent=done+'/'+BDAY.length;
+  document.getElementById('bday-prog').textContent=done+' of '+BDAY.length+' completed'+(done===BDAY.length?' 🎉':'');
+  const grid=document.getElementById('bday-grid');grid.innerHTML='';
+  BDAY.forEach((txt,i)=>{
+    const el=document.createElement('div');el.className='bday-item'+(items[i]?' done':'');
+    el.innerHTML='<div class="bday-check">'+(items[i]?'✓':'')+'</div><span>'+txt+'</span>';
+    el.onclick=()=>{if(!ST.birthday)ST.birthday={};if(!ST.birthday.items)ST.birthday.items=Array(BDAY.length).fill(false);ST.birthday.items[i]=!ST.birthday.items[i];save();if(ST.birthday.items.every(Boolean)&&!ST.birthday.cel){ST.birthday.cel=true;save();document.getElementById('cel-emoji').textContent='🎂';document.getElementById('cel-title').textContent='All 14 Found!';document.getElementById('cel-msg').textContent='Explorer Level 14 status earned. Happy Birthday, Elizabeth!';document.getElementById('celebration').classList.add('show');confetti();}renderBday();};
+    grid.appendChild(el);
+  });
+}
+function closeCel(){document.getElementById('celebration').classList.remove('show');}
+function confetti(){
+  const cols=['#B7950B','#7D3C98','#C0392B','#1E8449','#fff'];
+  for(let i=0;i<60;i++)setTimeout(()=>{
+    const el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;top:-20px;background:'+cols[Math.floor(Math.random()*cols.length)]+';width:'+(5+Math.random()*8)+'px;height:'+(5+Math.random()*8)+'px;animation-delay:'+Math.random()*1.2+'s;animation-duration:'+(2+Math.random()*1.5)+'s;border-radius:'+(Math.random()>.5?'50%':'0');
+    document.body.appendChild(el);setTimeout(()=>el.remove(),4000);
+  },i*25);
+}
+function goHome(){cur=null;hideAll();document.getElementById('screen-cover').style.display='flex';renderCover();}
+function resetAll(){if(confirm('Reset all progress? This cannot be undone!')){ST={};save();renderCover();}}
+renderCover();
+
+var lbIdx=0;
+function triggerPhoto(){document.getElementById('photo-input').click();}
+function handlePhoto(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    var data=ev.target.result;
+    if(!ST[cur.id])ST[cur.id]={};
+    if(!ST[cur.id].photos)ST[cur.id].photos=[];
+    ST[cur.id].photos.push(data);
+    save();renderGalleryStrip();applyHeroBg(data);
+  };
+  reader.readAsDataURL(file);e.target.value='';
+}
+function applyHeroBg(data){
+  var hero=document.getElementById('loc-hero');
+  if(data){hero.style.backgroundImage='url('+data+')';hero.style.backgroundSize='cover';hero.style.backgroundPosition='center';}
+  else{hero.style.backgroundImage='';hero.style.background=cur.bg||'linear-gradient(135deg,#333,#555)';}
+}
+function renderGalleryStrip(){
+  var wrap=document.getElementById('gallery-strip');
+  var photos=(ST[cur.id]||{}).photos||[];
+  wrap.innerHTML='';
+  var addBtn=document.createElement('div');addBtn.className='gallery-add-btn';
+  addBtn.innerHTML='<span class="gallery-add-icon">📷</span><span class="gallery-add-label">Add</span>';
+  addBtn.onclick=triggerPhoto;wrap.appendChild(addBtn);
+  if(!photos.length){
+    var empty=document.createElement('span');empty.className='gallery-empty';
+    empty.textContent='No photos yet — tap to add!';wrap.appendChild(empty);
+  } else {
+    photos.forEach(function(src,i){
+      var img=document.createElement('img');img.className='gallery-thumb';img.src=src;
+      img.onclick=(function(idx){return function(){openLightbox(idx);};})(i);
+      wrap.appendChild(img);
+    });
+  }
+}
+function openLightbox(idx){
+  var photos=(ST[cur.id]||{}).photos||[];if(!photos.length)return;
+  lbIdx=idx;document.getElementById('lightbox').classList.add('show');renderLightbox();
+}
+function renderLightbox(){
+  var photos=(ST[cur.id]||{}).photos||[];
+  document.getElementById('lb-img').src=photos[lbIdx];
+  document.getElementById('lb-counter').textContent=(lbIdx+1)+' of '+photos.length;
+  document.getElementById('lb-prev').disabled=lbIdx===0;
+  document.getElementById('lb-next').disabled=lbIdx===photos.length-1;
+  var dots=document.getElementById('lb-dots');dots.innerHTML='';
+  photos.forEach(function(_,i){
+    var d=document.createElement('div');d.className='lb-dot'+(i===lbIdx?' active':'');
+    d.onclick=(function(ii){return function(){lbIdx=ii;renderLightbox();};})(i);
+    dots.appendChild(d);
+  });
+}
+function lbPrev(){if(lbIdx>0){lbIdx--;renderLightbox();}}
+function lbNext(){var p=(ST[cur.id]||{}).photos||[];if(lbIdx<p.length-1){lbIdx++;renderLightbox();}}
+function lbAskDelete(){document.getElementById('lb-confirm').classList.add('show');}
+function lbCancelDelete(){document.getElementById('lb-confirm').classList.remove('show');}
+function lbDeleteConfirmed(){
+  document.getElementById('lb-confirm').classList.remove('show');
+  var photos=(ST[cur.id]||{}).photos||[];
+  photos.splice(lbIdx,1);ST[cur.id].photos=photos;save();
+  if(!photos.length){closeLightbox();applyHeroBg(null);}
+  else{lbIdx=Math.min(lbIdx,photos.length-1);renderLightbox();applyHeroBg(photos[photos.length-1]);}
+  renderGalleryStrip();
+}
+function lbDelete(){lbAskDelete();}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('show');}
+var _tsX=0,_tsY=0;
+document.addEventListener('touchstart',function(e){
+  if(!document.getElementById('lightbox').classList.contains('show'))return;
+  if(e.target.closest('button')||e.target.closest('.lb-confirm'))return;
+  _tsX=e.touches[0].clientX;_tsY=e.touches[0].clientY;
+},true);
+document.addEventListener('touchend',function(e){
+  if(!document.getElementById('lightbox').classList.contains('show'))return;
+  if(e.target.closest('button')||e.target.closest('.lb-confirm'))return;
+  var dx=e.changedTouches[0].clientX-_tsX;
+  var dy=e.changedTouches[0].clientY-_tsY;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){dx<0?lbNext():lbPrev();}
+},true);
+
+</script>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-header">
+    <span class="lightbox-counter" id="lb-counter"></span>
+    <div class="lightbox-actions">
+      <button class="lb-del-btn" onclick="lbAskDelete()">🗑 Delete</button>
+      <button class="lb-close-btn" onclick="closeLightbox()">✕</button>
+    </div>
+  </div>
+  <div class="lightbox-img-wrap"><img class="lightbox-img" id="lb-img" src=""></div>
+  <div class="lightbox-nav">
+    <button class="lb-nav-btn" id="lb-prev" onclick="lbPrev()">&#8249;</button>
+    <div class="lightbox-dots" id="lb-dots"></div>
+    <button class="lb-nav-btn" id="lb-next" onclick="lbNext()">&#8250;</button>
+  </div>
+  <div class="lb-confirm" id="lb-confirm">
+    <span class="lb-confirm-msg">Delete this photo?</span>
+    <button class="lb-confirm-yes" onclick="lbDeleteConfirmed()">Yes, delete</button>
+    <button class="lb-confirm-no" onclick="lbCancelDelete()">Keep it</button>
+  </div>
+</div>
+</body>
+</html>

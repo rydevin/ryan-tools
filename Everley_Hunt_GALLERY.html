@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>👑 Everley's Royal Treasure Hunt</title>
+<style>
+@import url('data:text/css,');
+:root{--rose:#C0392B;--rose-lt:#FDEDEC;--gold:#F4D03F;--purple:#7D3C98;--green:#1E8449;--cream:#FEF9F0;--ink:#2C2C2C;--mid:#777;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--cream);font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;color:var(--ink);}
+.ff{font-family:Georgia,'Times New Roman',serif;font-weight:900;letter-spacing:-.5px;}
+.top-nav{position:sticky;top:0;z-index:100;background:var(--rose);padding:14px 20px 12px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 12px rgba(192,57,43,.35);}
+.nav-back{font-size:22px;cursor:pointer;color:#fff;}
+.nav-title{font-size:20px;font-weight:900;color:#fff;flex:1;}
+.nav-score{font-size:16px;font-weight:800;color:rgba(255,255,255,.85);}
+#screen-cover{display:flex;flex-direction:column;background:linear-gradient(160deg,#7D3C98 0%,#C0392B 55%,#F4D03F 100%);}
+.cover-hero{width:100%;height:220px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#5B2C6F 0%,#C0392B 50%,#F4D03F 100%);}
+.cover-hero-emoji{font-size:90px;filter:drop-shadow(2px 4px 8px rgba(0,0,0,.3));}
+.cover-body{padding:24px 24px 28px;text-align:center;}
+.cover-crown{font-size:56px;margin-bottom:8px;}
+.cover-title{font-size:38px;font-weight:900;color:#fff;text-shadow:2px 3px 0 rgba(0,0,0,.25);line-height:1.1;margin-bottom:8px;}
+.cover-sub{font-size:19px;font-weight:800;color:var(--gold);margin-bottom:18px;}
+.cover-badge{display:inline-block;background:var(--gold);color:#5B2C6F;font-size:14px;font-weight:900;padding:8px 22px;border-radius:50px;margin-bottom:16px;}
+.cover-desc{color:rgba(255,255,255,.9);font-size:14px;font-weight:700;line-height:1.6;margin-bottom:22px;}
+.prog-wrap{background:rgba(255,255,255,.2);border-radius:50px;height:10px;margin-bottom:8px;}
+.prog-bar{border-radius:50px;height:10px;transition:width .5s ease;}
+.prog-label{color:rgba(255,255,255,.8);font-size:13px;font-weight:700;margin-bottom:22px;}
+.loc-cards{display:flex;flex-direction:column;gap:12px;padding:0 18px 40px;}
+.loc-card{background:#fff;border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.1);overflow:hidden;cursor:pointer;display:flex;align-items:center;transition:transform .1s;}
+.loc-card:active{transform:scale(.97);}
+.loc-stripe{width:8px;align-self:stretch;flex-shrink:0;}
+.loc-info{flex:1;padding:14px 12px;}
+.loc-name{font-size:20px;font-weight:900;}
+.loc-prog-text{font-size:13px;font-weight:700;color:var(--mid);margin-top:2px;}
+.loc-mini-wrap{background:#F0F0F0;border-radius:50px;height:6px;margin-top:8px;}
+.loc-mini-bar{border-radius:50px;height:6px;transition:width .4s;}
+.loc-arrow{font-size:20px;padding-right:14px;color:#CCC;}
+#screen-location{display:none;flex-direction:column;min-height:100vh;}
+.loc-hero{width:100%;height:190px;display:flex;align-items:center;justify-content:center;position:relative;}
+.loc-hero-emoji{font-size:80px;filter:drop-shadow(1px 3px 6px rgba(0,0,0,.3));}
+.loc-hero-title{position:absolute;bottom:14px;left:18px;font-size:36px;font-weight:900;color:#fff;text-shadow:1px 2px 8px rgba(0,0,0,.5);}
+.loc-prog-bar-wrap{height:6px;background:#EEE;}
+.loc-prog-bar{height:6px;transition:width .4s;}
+.loc-body{padding:18px 18px 100px;}
+.sec-head{font-size:18px;font-weight:900;margin:22px 0 12px;display:flex;align-items:center;gap:8px;}
+.sec-head:first-child{margin-top:0;}
+.item-list{display:flex;flex-direction:column;gap:9px;}
+.item{display:flex;align-items:center;gap:14px;background:#fff;border-radius:14px;padding:13px 15px;box-shadow:0 2px 8px rgba(0,0,0,.07);cursor:pointer;border-left:5px solid var(--c,#CCC);transition:background .2s;}
+.item:active{transform:scale(.98);}
+.item.done{background:var(--lt,#F9F9F9);}
+.item.done .itext{text-decoration:line-through;color:var(--mid);}
+.icheck{width:28px;height:28px;border-radius:8px;border:2.5px solid var(--c,#CCC);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;background:#fff;transition:background .2s;}
+.item.done .icheck{background:var(--c,#CCC);color:#fff;}
+.itext{font-size:16px;font-weight:700;flex:1;line-height:1.3;}
+.mitem{display:flex;align-items:center;gap:14px;background:linear-gradient(90deg,var(--lt,#FFF),#fff);border-radius:14px;padding:13px 15px;box-shadow:0 2px 8px rgba(0,0,0,.07);cursor:pointer;border-left:5px solid var(--c,#CCC);}
+.mitem:active{transform:scale(.98);}
+.mitem.done{opacity:.65;}
+.mitem.done .itext{text-decoration:line-through;}
+.micon{font-size:24px;flex-shrink:0;}
+.celebration{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.6);align-items:center;justify-content:center;}
+.celebration.show{display:flex;}
+.cel-box{background:#fff;border-radius:24px;padding:32px 24px;text-align:center;max-width:310px;width:90%;animation:popIn .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.cel-emoji{font-size:60px;margin-bottom:10px;}
+.cel-title{font-size:26px;font-weight:900;color:var(--rose);margin-bottom:8px;}
+.cel-msg{font-size:15px;font-weight:700;color:#555;margin-bottom:22px;line-height:1.5;}
+.cel-btn{background:var(--rose);color:#fff;border:none;border-radius:50px;font-size:18px;font-weight:900;padding:13px 32px;cursor:pointer;}
+.confetti-piece{position:fixed;pointer-events:none;z-index:300;animation:fall 2.5s ease-in forwards;}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.reset-btn{display:block;margin:24px auto 40px;background:none;border:2px solid rgba(255,255,255,.3);border-radius:50px;padding:10px 24px;color:rgba(255,255,255,.4);font-size:13px;font-weight:700;cursor:pointer;}
+
+/* ── Gallery ───────────────────────────────── */
+.loc-hero{position:relative;background-size:cover;background-position:center;}
+.loc-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1) 0%,rgba(0,0,0,.6) 100%);}
+.gallery-strip-wrap{background:#111;padding:10px 12px;display:flex;align-items:center;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.gallery-strip-wrap::-webkit-scrollbar{display:none;}
+.gallery-add-btn{flex-shrink:0;width:62px;height:62px;border-radius:10px;border:2px dashed rgba(255,255,255,.4);background:rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:2px;}
+.gallery-add-btn:active{background:rgba(255,255,255,.14);}
+.gallery-add-icon{font-size:22px;}
+.gallery-add-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.5px;text-transform:uppercase;}
+.gallery-thumb{flex-shrink:0;width:62px;height:62px;border-radius:10px;object-fit:cover;cursor:pointer;border:2.5px solid transparent;transition:border-color .15s;}
+.gallery-thumb:active{border-color:rgba(255,255,255,.6);}
+.gallery-empty{font-size:11px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.5px;padding:0 4px;align-self:center;}
+#photo-input{display:none;}
+.lightbox{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.96);flex-direction:column;}
+.lightbox.show{display:flex;}
+.lightbox-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;flex-shrink:0;}
+.lightbox-counter{color:rgba(255,255,255,.55);font-size:13px;font-weight:700;}
+.lightbox-actions{display:flex;gap:10px;align-items:center;}
+.lb-del-btn{background:rgba(255,60,60,.2);border:1px solid rgba(255,80,80,.5);border-radius:20px;color:#FF7070;font-size:13px;font-weight:700;padding:6px 14px;cursor:pointer;}
+.lb-del-btn:active{background:rgba(255,60,60,.4);}
+.lb-close-btn{background:rgba(255,255,255,.1);border:none;border-radius:50%;width:34px;height:34px;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.lb-close-btn:active{background:rgba(255,255,255,.2);}
+.lightbox-img-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0 8px;}
+.lightbox-img{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px;}
+.lightbox-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;flex-shrink:0;}
+.lb-nav-btn{background:rgba(255,255,255,.1);border:none;border-radius:50%;width:46px;height:46px;color:#fff;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.lb-nav-btn:active{background:rgba(255,255,255,.2);}
+.lb-nav-btn:disabled{opacity:.2;pointer-events:none;}
+.lightbox-dots{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:60%;}
+.lb-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .15s;}
+.lb-dot.active{background:#fff;}
+
+
+.lb-confirm{display:none;position:fixed;bottom:0;left:0;right:0;z-index:600;background:rgba(10,5,20,.97);padding:20px 24px 40px;flex-direction:column;align-items:center;gap:14px;border-top:1px solid rgba(255,255,255,.15);}
+.lb-confirm.show{display:flex;}
+.lb-confirm-msg{color:#fff;font-size:17px;font-weight:700;text-align:center;}
+.lb-confirm-yes{background:#C0392B;border:none;color:#fff;font-size:16px;font-weight:900;padding:14px 0;border-radius:12px;width:100%;cursor:pointer;}
+.lb-confirm-yes:active{background:#a93226;}
+.lb-confirm-no{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.25);color:#fff;font-size:16px;font-weight:700;padding:14px 0;border-radius:12px;width:100%;cursor:pointer;}
+.lb-confirm-no:active{background:rgba(255,255,255,.18);}
+
+</style>
+</head>
+<body>
+<div id="screen-cover">
+  <div class="cover-hero"><div class="cover-hero-emoji">🏰✨👑</div></div>
+  <div class="cover-body">
+    <div class="cover-crown">👑</div>
+    <div class="cover-title">Everley's Royal<br>Treasure Hunt</div>
+    <div class="cover-sub">The Great England Expedition</div>
+    <div class="cover-badge">🌟 Royal Treasure Hunter 🌟</div>
+    <div class="cover-desc">Tap each item as you find it — your progress saves automatically!</div>
+    <div class="prog-wrap"><div class="prog-bar" id="cover-bar" style="background:var(--gold);width:0%"></div></div>
+    <div class="prog-label" id="cover-label">0 of 43 found ✨</div>
+  </div>
+  <div class="loc-cards" id="loc-cards"></div>
+  <button class="reset-btn" onclick="resetAll()">Reset all progress</button>
+</div>
+<div id="screen-location">
+  <div class="top-nav">
+    <span class="nav-back" onclick="goHome()">← Back</span>
+    <span class="nav-title" id="nav-title"></span>
+    <span class="nav-score" id="nav-score"></span>
+  </div>
+  <div class="loc-hero" id="loc-hero">
+  <div class="loc-hero-overlay"></div>
+    <div class="loc-hero-emoji" id="loc-hero-emoji"></div>
+    <div class="loc-hero-title" id="loc-hero-title"></div>
+  </div>
+  <div class="loc-prog-bar-wrap"><div class="loc-prog-bar" id="loc-bar"></div></div>
+  <div class="gallery-strip-wrap" id="gallery-strip"></div>
+  <input type="file" id="photo-input" accept="image/*" onchange="handlePhoto(event)">
+
+  <div class="loc-body" id="loc-body"></div>
+</div>
+<div class="celebration" id="celebration">
+  <div class="cel-box">
+    <div class="cel-emoji" id="cel-emoji">🎉</div>
+    <div class="cel-title" id="cel-title">Hooray!</div>
+    <div class="cel-msg" id="cel-msg"></div>
+    <button class="cel-btn" onclick="closeCel()">Keep going! →</button>
+  </div>
+</div>
+<script>
+const LOCS=[
+  {id:'london',name:'London',emoji:'🏙️',color:'#C0392B',lt:'#FDEDEC',bg:'linear-gradient(135deg,#c0392b,#922b21)',
+   finds:['Red phone booth','Royal Guard','Double decker bus','Black taxi','River boat','Crown in a shop window','Someone walking a dog','A lion statue'],
+   missions:[{i:'🕊️',t:'Count 20 pigeons'},{i:'🚪',t:'Find the biggest door in London'},{i:'👸',t:'Take a princess photo'}]},
+  {id:'cambridge',name:'Cambridge',emoji:'🦢',color:'#1E8449',lt:'#EAFAF1',bg:'linear-gradient(135deg,#1e8449,#186a3b)',
+   finds:['Swan','Duck family','Bicycle with flowers','Giant wooden door','A bridge','Someone punting'],
+   missions:[{i:'🌿',t:'Find a secret garden'},{i:'🚲',t:'Count 25 bicycles'},{i:'🧙',t:'Pretend to attend wizard school'}]},
+  {id:'york',name:'York',emoji:'⚔️',color:'#784212',lt:'#FEF5E7',bg:'linear-gradient(135deg,#784212,#935116)',
+   finds:['Viking helmet','Sword','Raven','Castle wall','Crooked building','Ghost sign'],
+   missions:[{i:'🏘️',t:'Walk through The Shambles'},{i:'🏚️',t:'Find the oldest-looking building'},{i:'😤',t:'Make your best Viking face'}]},
+  {id:'dales',name:'Yorkshire Dales',emoji:'🌿',color:'#1A5276',lt:'#EBF5FB',bg:'linear-gradient(135deg,#1a5276,#154360)',
+   finds:['20 sheep','Waterfall','Stone bridge','Wildflowers','Bunny rabbit','Stream'],
+   missions:[{i:'💧',t:'Skip a rock'},{i:'🌉',t:'Cross a tiny bridge'},{i:'⛰️',t:'Climb to a great viewpoint'}]},
+  {id:'cotswolds',name:'Cotswolds',emoji:'🌸',color:'#6C3483',lt:'#F4ECF7',bg:'linear-gradient(135deg,#6c3483,#512e81)',
+   finds:['Thatched roof','Duck','Flower-covered cottage','Stone bridge','Bakery','Sheep'],
+   missions:[{i:'🏡',t:'Find the prettiest cottage'},{i:'🌲',t:'Find a hidden footpath'},{i:'🥐',t:'Eat a British treat'}]}
+];
+const TOTAL=LOCS.reduce((s,l)=>s+l.finds.length+l.missions.length,0);
+let cur=null;
+let ST={};try{ST=JSON.parse(localStorage.getItem('ev_hunt')||'{}')}catch(e){}
+function save(){try{localStorage.setItem('ev_hunt',JSON.stringify(ST))}catch(e){}}
+function locDone(l){const s=ST[l.id]||{};return(s.f||[]).filter(Boolean).length+(s.m||[]).filter(Boolean).length;}
+function locTot(l){return l.finds.length+l.missions.length;}
+function renderCover(){
+  const done=LOCS.reduce((s,l)=>s+locDone(l),0),pct=TOTAL?Math.round(done/TOTAL*100):0;
+  document.getElementById('cover-bar').style.width=pct+'%';
+  document.getElementById('cover-label').textContent=done+' of '+TOTAL+' found ✨';
+  const cards=document.getElementById('loc-cards');cards.innerHTML='';
+  LOCS.forEach(l=>{
+    const d=locDone(l),t=locTot(l),p=t?Math.round(d/t*100):0;
+    const el=document.createElement('div');el.className='loc-card';
+    el.innerHTML='<div class="loc-stripe" style="background:'+l.color+'"></div><div class="loc-info"><div class="loc-name" style="color:'+l.color+'">'+l.emoji+' '+l.name+'</div><div class="loc-prog-text">'+d+' of '+t+' found'+(d===t?' 🎉':'')+'</div><div class="loc-mini-wrap"><div class="loc-mini-bar" style="width:'+p+'%;background:'+l.color+'"></div></div></div><div class="loc-arrow">›</div>';
+    el.onclick=()=>openLoc(l.id);cards.appendChild(el);
+  });
+}
+function openLoc(id){
+  cur=LOCS.find(l=>l.id===id);
+  document.getElementById('screen-cover').style.display='none';
+  document.getElementById('screen-location').style.display='flex';
+  document.getElementById('nav-title').textContent=cur.name;
+  const hero=document.getElementById('loc-hero');
+  hero.style.background=cur.bg;
+  document.getElementById('loc-hero-emoji').textContent=cur.emoji;
+  document.getElementById('loc-hero-title').textContent=cur.emoji+' '+cur.name;
+  document.getElementById('loc-bar').style.background=cur.color;
+  renderLoc();var _ph=(ST[cur.id]||{}).photos||[];applyHeroBg(_ph.length?_ph[_ph.length-1]:null);renderGalleryStrip();window.scrollTo(0,0);
+}
+function renderLoc(){
+  const l=cur,s=ST[l.id]||{};
+  const f=s.f||Array(l.finds.length).fill(false);
+  const m=s.m||Array(l.missions.length).fill(false);
+  const done=f.filter(Boolean).length+m.filter(Boolean).length,tot=locTot(l);
+  document.getElementById('nav-score').textContent=done+'/'+tot;
+  document.getElementById('loc-bar').style.width=(tot?done/tot*100:0)+'%';
+  const body=document.getElementById('loc-body');body.innerHTML='';
+  const fh=document.createElement('div');fh.className='sec-head';fh.style.color=l.color;fh.textContent='✨ Find These Things!';body.appendChild(fh);
+  const fl=document.createElement('div');fl.className='item-list';
+  l.finds.forEach((txt,i)=>{
+    const el=document.createElement('div');el.className='item'+(f[i]?' done':'');el.style.cssText='--c:'+l.color+';--lt:'+l.lt;
+    el.innerHTML='<div class="icheck">'+(f[i]?'✓':'')+'</div><div class="itext">'+txt+'</div>';
+    el.onclick=()=>{if(!ST[l.id])ST[l.id]={};if(!ST[l.id].f)ST[l.id].f=Array(l.finds.length).fill(false);ST[l.id].f[i]=!ST[l.id].f[i];save();checkCel();renderLoc();};
+    fl.appendChild(el);
+  });body.appendChild(fl);
+  const mh=document.createElement('div');mh.className='sec-head';mh.style.color=l.color;mh.textContent='🌟 Your Missions';body.appendChild(mh);
+  const ml=document.createElement('div');ml.className='item-list';
+  l.missions.forEach((ms,i)=>{
+    const el=document.createElement('div');el.className='mitem'+(m[i]?' done':'');el.style.cssText='--c:'+l.color+';--lt:'+l.lt;
+    el.innerHTML='<div class="micon">'+ms.i+'</div><div class="itext">'+ms.t+'</div><div class="icheck" style="border-color:'+l.color+';'+(m[i]?'background:'+l.color+';color:#fff':'')+'">'+  (m[i]?'✓':'')+'</div>';
+    el.onclick=()=>{if(!ST[l.id])ST[l.id]={};if(!ST[l.id].m)ST[l.id].m=Array(l.missions.length).fill(false);ST[l.id].m[i]=!ST[l.id].m[i];save();checkCel();renderLoc();};
+    ml.appendChild(el);
+  });body.appendChild(ml);
+}
+function checkCel(){
+  const l=cur,s=ST[l.id]||{};
+  if((s.f||[]).filter(Boolean).length+(s.m||[]).filter(Boolean).length===locTot(l)&&!s.cel){ST[l.id].cel=true;save();
+    document.getElementById('cel-emoji').textContent=l.emoji;
+    document.getElementById('cel-title').textContent=l.name+' Complete! 🎉';
+    document.getElementById('cel-msg').textContent='Amazing work, Royal Treasure Hunter! You found everything in '+l.name+'!';
+    document.getElementById('celebration').classList.add('show');confetti();
+  }
+}
+function closeCel(){document.getElementById('celebration').classList.remove('show');}
+function confetti(){
+  const cols=['#C0392B','#F4D03F','#7D3C98','#1E8449','#3498DB'];
+  for(let i=0;i<60;i++)setTimeout(()=>{
+    const el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText='left:'+Math.random()*100+'vw;top:-20px;background:'+cols[Math.floor(Math.random()*cols.length)]+';width:'+(6+Math.random()*8)+'px;height:'+(6+Math.random()*8)+'px;animation-delay:'+Math.random()*1.2+'s;animation-duration:'+(2+Math.random()*1.5)+'s;border-radius:'+(Math.random()>.5?'50%':'2px');
+    document.body.appendChild(el);setTimeout(()=>el.remove(),4000);
+  },i*25);
+}
+function goHome(){cur=null;document.getElementById('screen-location').style.display='none';document.getElementById('screen-cover').style.display='flex';renderCover();}
+function resetAll(){if(confirm('Reset all progress? This cannot be undone!')){ST={};save();renderCover();}}
+renderCover();
+
+var lbIdx=0;
+function triggerPhoto(){document.getElementById('photo-input').click();}
+function handlePhoto(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    var data=ev.target.result;
+    if(!ST[cur.id])ST[cur.id]={};
+    if(!ST[cur.id].photos)ST[cur.id].photos=[];
+    ST[cur.id].photos.push(data);
+    save();renderGalleryStrip();applyHeroBg(data);
+  };
+  reader.readAsDataURL(file);e.target.value='';
+}
+function applyHeroBg(data){
+  var hero=document.getElementById('loc-hero');
+  if(data){hero.style.backgroundImage='url('+data+')';hero.style.backgroundSize='cover';hero.style.backgroundPosition='center';}
+  else{hero.style.backgroundImage='';hero.style.background=cur.bg||'linear-gradient(135deg,#333,#555)';}
+}
+function renderGalleryStrip(){
+  var wrap=document.getElementById('gallery-strip');
+  var photos=(ST[cur.id]||{}).photos||[];
+  wrap.innerHTML='';
+  var addBtn=document.createElement('div');addBtn.className='gallery-add-btn';
+  addBtn.innerHTML='<span class="gallery-add-icon">📷</span><span class="gallery-add-label">Add</span>';
+  addBtn.onclick=triggerPhoto;wrap.appendChild(addBtn);
+  if(!photos.length){
+    var empty=document.createElement('span');empty.className='gallery-empty';
+    empty.textContent='No photos yet — tap to add!';wrap.appendChild(empty);
+  } else {
+    photos.forEach(function(src,i){
+      var img=document.createElement('img');img.className='gallery-thumb';img.src=src;
+      img.onclick=(function(idx){return function(){openLightbox(idx);};})(i);
+      wrap.appendChild(img);
+    });
+  }
+}
+function openLightbox(idx){
+  var photos=(ST[cur.id]||{}).photos||[];if(!photos.length)return;
+  lbIdx=idx;document.getElementById('lightbox').classList.add('show');renderLightbox();
+}
+function renderLightbox(){
+  var photos=(ST[cur.id]||{}).photos||[];
+  document.getElementById('lb-img').src=photos[lbIdx];
+  document.getElementById('lb-counter').textContent=(lbIdx+1)+' of '+photos.length;
+  document.getElementById('lb-prev').disabled=lbIdx===0;
+  document.getElementById('lb-next').disabled=lbIdx===photos.length-1;
+  var dots=document.getElementById('lb-dots');dots.innerHTML='';
+  photos.forEach(function(_,i){
+    var d=document.createElement('div');d.className='lb-dot'+(i===lbIdx?' active':'');
+    d.onclick=(function(ii){return function(){lbIdx=ii;renderLightbox();};})(i);
+    dots.appendChild(d);
+  });
+}
+function lbPrev(){if(lbIdx>0){lbIdx--;renderLightbox();}}
+function lbNext(){var p=(ST[cur.id]||{}).photos||[];if(lbIdx<p.length-1){lbIdx++;renderLightbox();}}
+function lbAskDelete(){document.getElementById('lb-confirm').classList.add('show');}
+function lbCancelDelete(){document.getElementById('lb-confirm').classList.remove('show');}
+function lbDeleteConfirmed(){
+  document.getElementById('lb-confirm').classList.remove('show');
+  var photos=(ST[cur.id]||{}).photos||[];
+  photos.splice(lbIdx,1);ST[cur.id].photos=photos;save();
+  if(!photos.length){closeLightbox();applyHeroBg(null);}
+  else{lbIdx=Math.min(lbIdx,photos.length-1);renderLightbox();applyHeroBg(photos[photos.length-1]);}
+  renderGalleryStrip();
+}
+function lbDelete(){lbAskDelete();}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('show');}
+var _tsX=0,_tsY=0;
+document.addEventListener('touchstart',function(e){
+  if(!document.getElementById('lightbox').classList.contains('show'))return;
+  if(e.target.closest('button')||e.target.closest('.lb-confirm'))return;
+  _tsX=e.touches[0].clientX;_tsY=e.touches[0].clientY;
+},true);
+document.addEventListener('touchend',function(e){
+  if(!document.getElementById('lightbox').classList.contains('show'))return;
+  if(e.target.closest('button')||e.target.closest('.lb-confirm'))return;
+  var dx=e.changedTouches[0].clientX-_tsX;
+  var dy=e.changedTouches[0].clientY-_tsY;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){dx<0?lbNext():lbPrev();}
+},true);
+
+</script>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-header">
+    <span class="lightbox-counter" id="lb-counter"></span>
+    <div class="lightbox-actions">
+      <button class="lb-del-btn" onclick="lbAskDelete()">🗑 Delete</button>
+      <button class="lb-close-btn" onclick="closeLightbox()">✕</button>
+    </div>
+  </div>
+  <div class="lightbox-img-wrap"><img class="lightbox-img" id="lb-img" src=""></div>
+  <div class="lightbox-nav">
+    <button class="lb-nav-btn" id="lb-prev" onclick="lbPrev()">&#8249;</button>
+    <div class="lightbox-dots" id="lb-dots"></div>
+    <button class="lb-nav-btn" id="lb-next" onclick="lbNext()">&#8250;</button>
+  </div>
+  <div class="lb-confirm" id="lb-confirm">
+    <span class="lb-confirm-msg">Delete this photo?</span>
+    <button class="lb-confirm-yes" onclick="lbDeleteConfirmed()">Yes, delete</button>
+    <button class="lb-confirm-no" onclick="lbCancelDelete()">Keep it</button>
+  </div>
+</div>
+</body>
+</html>
